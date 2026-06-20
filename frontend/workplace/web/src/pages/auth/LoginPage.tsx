@@ -10,10 +10,12 @@ import type { LoginCredentials } from "@/types/staff";
 import PageMeta from "@/components/meta/PageMeta";
 import { PAGE_META_DATA } from "@/components/meta/pageMetaData";
 import { APP_ROUTES } from "@/routes/appRoutes";
+import { useCompany } from "@/hooks/useCompany";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { company } = useCompany();
 
   const [form, setForm] = useState<LoginCredentials>({
     email: "",
@@ -55,14 +57,24 @@ const LoginPage = () => {
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary mb-4">
-              <span className="text-white font-bold text-lg">CW</span>
-            </div>
+            {company?.logoUrl ? (
+              <img
+                src={company.logoUrl}
+                alt={company.companyName}
+                className="w-12 h-12 rounded-xl object-cover mx-auto mb-4"
+              />
+            ) : (
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary mb-4">
+                <span className="text-white font-bold text-lg">
+                  {company?.companyName?.[0] ?? "C"}
+                </span>
+              </div>
+            )}
             <h1 className="text-2xl font-semibold text-foreground">
-              Canwest Ghana
+              {company?.companyName ?? "Workplace"}
             </h1>
             <p className="text-sm text-muted-foreground mt-1">
-              Workplace — sign in to continue
+              {company?.slogan ?? "Sign in to continue"}
             </p>
           </div>
 

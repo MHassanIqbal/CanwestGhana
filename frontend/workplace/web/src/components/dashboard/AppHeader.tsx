@@ -16,10 +16,13 @@ const useHeaderTitle = (): string => {
   if (path === APP_ROUTES.staff) return stripSuffix(PAGE_META_DATA.staff.title);
   if (path === APP_ROUTES.staffNew)
     return stripSuffix(PAGE_META_DATA.staffNew.title);
-  if (id && path === APP_ROUTES.staffDetail(id))
+  if (id && path === APP_ROUTES.staffEdit(id))
     return stripSuffix(PAGE_META_DATA.staffEdit.title);
   if (path === APP_ROUTES.profile)
     return stripSuffix(PAGE_META_DATA.profile.title);
+
+  if (path === APP_ROUTES.company)
+    return stripSuffix(PAGE_META_DATA.company.title);
 
   return "Workplace";
 };

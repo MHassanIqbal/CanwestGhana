@@ -15,4 +15,10 @@ export const ENDPOINTS = {
     validateResetToken: (token: string) =>
       `/staff/password/reset/validate/${token}`,
   },
+
+  company: {
+    get: "/company",
+    update: "/company",
+    uploadLogo: "/company/logo",
+  },
 } as const;

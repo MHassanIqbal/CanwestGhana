@@ -13,6 +13,7 @@ import EditStaffPage from "./pages/staff/EditStaffPage";
 import ProfilePage from "./pages/staff/ProfilePage";
 import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
+import CompanyPage from "./pages/company/CompanyPage";
 
 const App = () => {
   return (
@@ -44,7 +45,12 @@ const AppWrapper = () => {
           <Route element={<RoleGuard allowedRoles={["admin"]} />}>
             <Route path={APP_ROUTES.staff} element={<StaffListPage />} />
             <Route path={APP_ROUTES.staffNew} element={<CreateStaffPage />} />
-            <Route path="/staff/:id" element={<EditStaffPage />} />
+            <Route
+              path={APP_ROUTES.staffEdit(":id")}
+              element={<EditStaffPage />}
+            />
+
+            <Route path={APP_ROUTES.company} element={<CompanyPage />} />
           </Route>
 
           <Route path={APP_ROUTES.profile} element={<ProfilePage />} />

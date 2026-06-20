@@ -24,6 +24,7 @@ import { LayoutDashboard, LogOut, ChevronUp, Users, User } from "lucide-react";
 import { staffApi } from "@/api/staffApi";
 import { useAuth } from "@/hooks/useAuth";
 import { APP_ROUTES } from "@/routes/appRoutes";
+import { useCompany } from "@/hooks/useCompany";
 
 const getInitials = (firstName?: string, lastName?: string) =>
   `${firstName?.[0] ?? ""}${lastName?.[0] ?? ""}`.toUpperCase();
@@ -31,6 +32,7 @@ const getInitials = (firstName?: string, lastName?: string) =>
 const AppSidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { company } = useCompany();
 
   const queryClient = useQueryClient();
   const { currentUser } = useAuth();
@@ -49,15 +51,25 @@ const AppSidebar = () => {
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <div className="flex items-center gap-3 px-2 py-3 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary shrink-0">
-            <span className="text-xs font-bold text-white">CW</span>
-          </div>
+          {company?.logoUrl ? (
+            <img
+              src={company.logoUrl}
+              alt={company.companyName}
+              className="h-8 w-8 rounded-lg object-cover shrink-0"
+            />
+          ) : (
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary shrink-0">
+              <span className="text-xs font-bold text-white">
+                {company?.companyName?.[0] ?? "C"}
+              </span>
+            </div>
+          )}
           <div className="flex flex-col min-w-0 group-data-[collapsible=icon]:hidden">
             <span className="text-sm font-semibold text-sidebar-foreground truncate">
-              Canwest Ghana
+              {company?.companyName ?? "Loading…"}
             </span>
             <span className="text-xs text-muted-foreground truncate">
-              Workplace
+              {company?.slogan ?? "Workplace"}
             </span>
           </div>
         </div>
@@ -88,11 +100,23 @@ const AppSidebar = () => {
               <SidebarMenu>
                 <SidebarMenuItem>
                   <SidebarMenuButton
-                    isActive={location.pathname === "/staff"}
-                    onClick={() => navigate("/staff")}
+                    isActive={location.pathname === APP_ROUTES.staff}
+                    onClick={() => navigate(APP_ROUTES.staff)}
                   >
                     <Users />
                     <span>Staff</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    isActive={location.pathname === APP_ROUTES.company}
+                    onClick={() => navigate(APP_ROUTES.company)}
+                  >
+                    <Users />
+                    <span>Company</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               </SidebarMenu>

@@ -15,6 +15,7 @@ import { connectDatabase } from "./config/databaseConnect.js";
 import errorMiddlewares from "./middlewares/errorMiddlewares.js";
 
 import staffRoutes from "./routes/staffRoutes.js";
+import companyRoutes from "./routes/companyRoutes.js";
 
 // Init Express
 const server = express();
@@ -47,8 +48,9 @@ server.use(
 // Init Cookie Parser
 server.use(cookieParser());
 
-// Staff routes
+// Routes
 server.use("/api/staff", staffRoutes);
+server.use("/api/company", companyRoutes);
 
 // Init Error Middleware
 server.use(errorMiddlewares);

@@ -31,6 +31,8 @@ const requiredEnvVars = [
   "DEFAULT_ADMIN_PASSWORD",
   "FRONTEND_WORKPLACE_URL",
   "FRONTEND_ECOMMERCE_URL",
+  "DEFAULT_COMPANY_NAME",
+  "DEFAULT_USD_TO_GHS_RATE",
 ];
 
 requiredEnvVars.forEach((envVar) => {

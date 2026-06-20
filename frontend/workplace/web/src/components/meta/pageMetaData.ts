@@ -35,4 +35,9 @@ export const PAGE_META_DATA = {
     title: "Reset Password | Canwest Ghana",
     description: "Set a new password for your account",
   },
+
+  company: {
+    title: "Company | Canwest Ghana",
+    description: "Manage company branding, contact info, and pricing settings",
+  },
 } as const;

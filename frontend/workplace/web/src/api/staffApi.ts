@@ -1,5 +1,5 @@
-import apiClient from "@/api/apiClient";
-import { ENDPOINTS } from "@/api/endpoints";
+import apiClient from "@/connection/apiClient";
+import { ENDPOINTS } from "@/connection/endpoints";
 import type {
   ChangePasswordInput,
   CreateStaffInput,
