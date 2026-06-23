@@ -20,7 +20,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { LayoutDashboard, LogOut, ChevronUp, Users, User } from "lucide-react";
+import {
+  LayoutDashboard,
+  LogOut,
+  ChevronUp,
+  Users,
+  User,
+  Tag,
+  Building2,
+} from "lucide-react";
 import { staffApi } from "@/api/staffApi";
 import { useAuth } from "@/hooks/useAuth";
 import { APP_ROUTES } from "@/routes/appRoutes";
@@ -107,16 +115,24 @@ const AppSidebar = () => {
                     <span>Staff</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
-              </SidebarMenu>
 
-              <SidebarMenu>
                 <SidebarMenuItem>
                   <SidebarMenuButton
                     isActive={location.pathname === APP_ROUTES.company}
                     onClick={() => navigate(APP_ROUTES.company)}
                   >
-                    <Users />
+                    <Building2 />
                     <span>Company</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    isActive={location.pathname === APP_ROUTES.brand}
+                    onClick={() => navigate(APP_ROUTES.brand)}
+                  >
+                    <Tag />
+                    <span>Brand</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               </SidebarMenu>

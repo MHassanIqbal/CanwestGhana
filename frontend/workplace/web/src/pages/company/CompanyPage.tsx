@@ -7,8 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { companyApi } from "@/api/companyApi";
 import InlineLoader from "@/components/loader/InlineLoader";
-import PageMeta from "@/components/meta/PageMeta";
-import { PAGE_META_DATA } from "@/components/meta/pageMetaData";
+import PageMeta from "@/meta/PageMeta";
+import { PAGE_META_DATA } from "@/meta/pageMetaData";
 import { Pencil } from "lucide-react";
 import type {
   BusinessDay,
@@ -272,7 +272,7 @@ const CompanySettingsForm = ({ company }: { company: Company }) => {
                 <img
                   src={logoPreview ?? company.logoUrl}
                   alt="Company logo"
-                  className="h-full w-full object-cover"
+                  className="h-full w-full object-contain"
                 />
               ) : (
                 <div className="h-full w-full flex items-center justify-center">

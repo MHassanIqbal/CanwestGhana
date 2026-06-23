@@ -7,8 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { staffApi } from "@/api/staffApi";
 import type { LoginCredentials } from "@/types/staff";
-import PageMeta from "@/components/meta/PageMeta";
-import { PAGE_META_DATA } from "@/components/meta/pageMetaData";
+import PageMeta from "@/meta/PageMeta";
+import { PAGE_META_DATA } from "@/meta/pageMetaData";
 import { APP_ROUTES } from "@/routes/appRoutes";
 import { useCompany } from "@/hooks/useCompany";
 

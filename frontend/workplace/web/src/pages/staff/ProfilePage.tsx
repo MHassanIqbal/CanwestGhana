@@ -8,8 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { staffApi } from "@/api/staffApi";
 import { useAuth } from "@/hooks/useAuth";
-import PageMeta from "@/components/meta/PageMeta";
-import { PAGE_META_DATA } from "@/components/meta/pageMetaData";
+import PageMeta from "@/meta/PageMeta";
+import { PAGE_META_DATA } from "@/meta/pageMetaData";
 import type { ChangePasswordInput, Staff } from "@/types/staff";
 import { toast } from "sonner";
 

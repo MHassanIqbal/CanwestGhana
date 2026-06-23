@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import PageMeta from "@/components/meta/PageMeta";
-import { PAGE_META_DATA } from "@/components/meta/pageMetaData";
+import PageMeta from "@/meta/PageMeta";
+import { PAGE_META_DATA } from "@/meta/pageMetaData";
 
 const NotFoundPage = () => {
   return (

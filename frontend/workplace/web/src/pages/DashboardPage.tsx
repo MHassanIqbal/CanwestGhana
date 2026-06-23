@@ -1,6 +1,6 @@
 import { useAuth } from "@/hooks/useAuth";
-import PageMeta from "@/components/meta/PageMeta";
-import { PAGE_META_DATA } from "@/components/meta/pageMetaData";
+import PageMeta from "@/meta/PageMeta";
+import { PAGE_META_DATA } from "@/meta/pageMetaData";
 
 const DashboardPage = () => {
   const { currentUser } = useAuth();

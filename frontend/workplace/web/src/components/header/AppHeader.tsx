@@ -2,7 +2,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import { APP_ROUTES } from "@/routes/appRoutes";
-import { PAGE_META_DATA } from "@/components/meta/pageMetaData";
+import { PAGE_META_DATA } from "@/meta/pageMetaData";
 import ThemeToggle from "@/components/common/ThemeToggle";
 
 const stripSuffix = (title: string) => title.split(" | ")[0];

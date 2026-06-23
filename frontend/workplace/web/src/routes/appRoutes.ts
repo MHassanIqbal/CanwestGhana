@@ -9,4 +9,8 @@ export const APP_ROUTES = {
   resetPasswordPattern: "/reset-password/:token",
 
   company: "/company",
+
+  brand: "/brand",
+  brandNew: "/brand/new",
+  brandDetail: (id: string) => `/brand/${id}`,
 } as const;

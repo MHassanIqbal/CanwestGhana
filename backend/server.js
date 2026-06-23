@@ -16,6 +16,7 @@ import errorMiddlewares from "./middlewares/errorMiddlewares.js";
 
 import staffRoutes from "./routes/staffRoutes.js";
 import companyRoutes from "./routes/companyRoutes.js";
+import brandRoutes from "./routes/brandRoutes.js";
 
 // Init Express
 const server = express();
@@ -51,6 +52,7 @@ server.use(cookieParser());
 // Routes
 server.use("/api/staff", staffRoutes);
 server.use("/api/company", companyRoutes);
+server.use("/api/brand", brandRoutes);
 
 // Init Error Middleware
 server.use(errorMiddlewares);

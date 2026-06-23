@@ -40,4 +40,17 @@ export const PAGE_META_DATA = {
     title: "Company | Canwest Ghana",
     description: "Manage company branding, contact info, and pricing settings",
   },
+
+  brand: {
+    title: "Brands | Canwest Ghana",
+    description: "Manage product brands",
+  },
+  brandNew: {
+    title: "Add Brand | Canwest Ghana",
+    description: "Create a new brand",
+  },
+  brandEdit: {
+    title: "Edit Brand | Canwest Ghana",
+    description: "Edit brand details",
+  },
 } as const;

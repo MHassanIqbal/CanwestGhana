@@ -21,4 +21,13 @@ export const ENDPOINTS = {
     update: "/company",
     uploadLogo: "/company/logo",
   },
+
+  brand: {
+    getAll: "/brand",
+    getById: (id: string) => `/brand/${id}`,
+    create: "/brand",
+    update: (id: string) => `/brand/${id}`,
+    delete: (id: string) => `/brand/${id}`,
+    uploadLogo: (id: string) => `/brand/${id}/logo`,
+  },
 } as const;

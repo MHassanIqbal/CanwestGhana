@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "@/index.css";
 import App from "@/App.tsx";
-import { MetaWrapper } from "@/components/meta/PageMeta.tsx";
+import { MetaWrapper } from "@/meta/PageMeta.tsx";
 import { Toaster } from "./components/ui/sonner";
 
 const queryClient = new QueryClient();

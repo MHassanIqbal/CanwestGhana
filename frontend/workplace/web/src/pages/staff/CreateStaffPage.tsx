@@ -15,8 +15,8 @@ import {
 import { staffApi } from "@/api/staffApi";
 import { useAuth } from "@/hooks/useAuth";
 import { APP_ROUTES } from "@/routes/appRoutes";
-import PageMeta from "@/components/meta/PageMeta";
-import { PAGE_META_DATA } from "@/components/meta/pageMetaData";
+import PageMeta from "@/meta/PageMeta";
+import { PAGE_META_DATA } from "@/meta/pageMetaData";
 import type { CreateStaffInput, StaffRole } from "@/types/staff";
 import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
