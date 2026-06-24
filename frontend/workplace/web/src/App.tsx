@@ -17,6 +17,9 @@ import CompanyPage from "./pages/company/CompanyPage";
 import BrandListPage from "./pages/brand/BrandListPage";
 import CreateBrandPage from "./pages/brand/CreateBrandPage";
 import EditBrandPage from "./pages/brand/EditBrandPage";
+import CategoryListPage from "./pages/category/CategoryListPage";
+import CreateCategoryPage from "./pages/category/CreateCategoryPage";
+import EditCategoryPage from "./pages/category/EditCategoryPage";
 
 const App = () => {
   return (
@@ -54,10 +57,25 @@ const AppWrapper = () => {
             />
 
             <Route path={APP_ROUTES.company} element={<CompanyPage />} />
+          </Route>
 
+          <Route element={<RoleGuard allowedRoles={["admin", "manager"]} />}>
             <Route path={APP_ROUTES.brand} element={<BrandListPage />} />
             <Route path={APP_ROUTES.brandNew} element={<CreateBrandPage />} />
-            <Route path="/brand/:id" element={<EditBrandPage />} />
+            <Route
+              path={APP_ROUTES.brandEdit(":id")}
+              element={<EditBrandPage />}
+            />
+
+            <Route path={APP_ROUTES.category} element={<CategoryListPage />} />
+            <Route
+              path={APP_ROUTES.categoryNew}
+              element={<CreateCategoryPage />}
+            />
+            <Route
+              path={APP_ROUTES.categoryEdit(":id")}
+              element={<EditCategoryPage />}
+            />
           </Route>
 
           <Route path={APP_ROUTES.profile} element={<ProfilePage />} />

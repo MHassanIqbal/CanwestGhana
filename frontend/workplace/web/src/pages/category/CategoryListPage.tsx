@@ -30,66 +30,73 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { brandApi } from "@/api/brandApi";
+import { categoryApi } from "@/api/categoryApi";
 import { APP_ROUTES } from "@/routes/appRoutes";
 import InlineLoader from "@/components/loader/InlineLoader";
 import PageMeta from "@/meta/PageMeta";
 import { PAGE_META_DATA } from "@/meta/pageMetaData";
-import type { Brand } from "@/types/brand";
+import type { Category } from "@/types/category";
 import { MoreHorizontal, Pencil, Trash2, Plus, Search } from "lucide-react";
 
-const BrandListPage = () => {
+const CategoryListPage = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
-  const [brandToDelete, setBrandToDelete] = useState<Brand | null>(null);
+  const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(
+    null,
+  );
 
   const {
-    data: allBrands = [],
+    data: allCategories = [],
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["brand", "list"],
-    queryFn: () => brandApi.getAllBrands(),
+    queryKey: ["category", "list"],
+    queryFn: () => categoryApi.getAllCategories(),
   });
 
-  const filteredBrands = allBrands.filter((brand) =>
-    brand.name.toLowerCase().includes(search.trim().toLowerCase()),
+  // Build a name lookup so we can show the parent's name instead of its ID.
+  const categoryMap = Object.fromEntries(allCategories.map((c) => [c._id, c]));
+
+  const filteredCategories = allCategories.filter((c) =>
+    c.name.toLowerCase().includes(search.trim().toLowerCase()),
   );
 
-  const { mutate: deleteBrand, isPending: isDeleting } = useMutation({
-    mutationFn: (id: string) => brandApi.deleteBrand(id),
+  const { mutate: deleteCategory, isPending: isDeleting } = useMutation({
+    mutationFn: (id: string) => categoryApi.deleteCategory(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["brand"] });
-      toast.success("Brand deleted.");
+      queryClient.invalidateQueries({ queryKey: ["category"] });
+      toast.success("Category deleted.");
     },
     onError: (err: { message: string }) => {
-      toast.error(err.message ?? "Failed to delete brand.");
+      toast.error(err.message ?? "Failed to delete category.");
     },
   });
 
   const confirmDelete = () => {
-    if (brandToDelete) {
-      deleteBrand(brandToDelete._id);
-      setBrandToDelete(null);
+    if (categoryToDelete) {
+      deleteCategory(categoryToDelete._id);
+      setCategoryToDelete(null);
     }
   };
 
   return (
     <>
       <PageMeta
-        title={PAGE_META_DATA.brand.title}
-        description={PAGE_META_DATA.brand.description}
+        title={PAGE_META_DATA.category.title}
+        description={PAGE_META_DATA.category.description}
       />
 
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-semibold text-foreground">Brands</h1>
+            <h1 className="text-xl font-semibold text-foreground">
+              Categories
+            </h1>
             <p className="text-sm text-muted-foreground mt-0.5">
-              {filteredBrands.length} brand
-              {filteredBrands.length !== 1 ? "s" : ""}
-              {search && ` (filtered from ${allBrands.length})`}
+              {filteredCategories.length} categor
+              {filteredCategories.length !== 1 ? "ies" : "y"}
+              {search && ` (filtered from ${allCategories.length})`}
             </p>
           </div>
 
@@ -97,24 +104,23 @@ const BrandListPage = () => {
             <div className="relative w-64">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search brands…"
+                placeholder="Search categories…"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="pl-8"
               />
             </div>
-            <Button onClick={() => navigate(APP_ROUTES.brandNew)}>
+            <Button onClick={() => navigate(APP_ROUTES.categoryNew)}>
               <Plus className="mr-2 h-4 w-4" />
-              Add brand
+              Add category
             </Button>
           </div>
         </div>
 
-        {isLoading && <InlineLoader text="Loading brands…" />}
-
+        {isLoading && <InlineLoader text="Loading categories…" />}
         {isError && (
           <p className="text-sm text-destructive">
-            Failed to load brands. Please refresh.
+            Failed to load categories. Please refresh.
           </p>
         )}
 
@@ -125,58 +131,69 @@ const BrandListPage = () => {
                 <TableRow>
                   <TableHead>Name</TableHead>
                   <TableHead>Slug</TableHead>
+                  <TableHead>Parent</TableHead>
                   <TableHead>Description</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead className="w-12" />
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredBrands.length === 0 ? (
+                {filteredCategories.length === 0 ? (
                   <TableRow>
                     <TableCell
-                      colSpan={5}
+                      colSpan={6}
                       className="text-center py-12 text-muted-foreground text-sm"
                     >
                       {search
-                        ? "No brands match your search."
-                        : "No brands found."}
+                        ? "No categories match your search."
+                        : "No categories found."}
                     </TableCell>
                   </TableRow>
                 ) : (
-                  filteredBrands.map((brand) => (
-                    <TableRow key={brand._id}>
+                  filteredCategories.map((category) => (
+                    <TableRow key={category._id}>
                       <TableCell className="flex items-center gap-3">
-                        {brand.logoUrl && (
+                        {category.imageUrl && (
                           <div className="h-7 w-7 rounded bg-muted flex items-center justify-center overflow-hidden shrink-0">
                             <img
-                              src={brand.logoUrl}
-                              alt={brand.name}
+                              src={category.imageUrl}
+                              alt={category.name}
                               className="h-full w-full object-contain"
                             />
                           </div>
                         )}
                         <span className="text-sm font-medium text-foreground">
-                          {brand.name}
+                          {category.name}
                         </span>
                       </TableCell>
 
                       <TableCell className="text-sm text-muted-foreground">
-                        {brand.slug}
+                        {category.slug}
+                      </TableCell>
+
+                      <TableCell className="text-sm text-muted-foreground">
+                        {category.parent ? (
+                          (categoryMap[category.parent]?.name ?? "—")
+                        ) : (
+                          <span className="text-xs text-muted-foreground/60">
+                            Root
+                          </span>
+                        )}
                       </TableCell>
 
                       <TableCell className="text-sm text-muted-foreground max-w-xs truncate">
-                        {brand.description || "—"}
+                        {category.description || "—"}
                       </TableCell>
 
                       <TableCell>
                         <Badge
                           className={
-                            brand.isActive
+                            category.isActive
                               ? "bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-400"
                               : "bg-muted text-muted-foreground"
                           }
                         >
-                          {brand.isActive ? "Active" : "Inactive"}
+                          {category.isActive ? "Active" : "Inactive"}
                         </Badge>
                       </TableCell>
 
@@ -194,7 +211,7 @@ const BrandListPage = () => {
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem
                               onClick={() =>
-                                navigate(APP_ROUTES.brandEdit(brand._id))
+                                navigate(APP_ROUTES.categoryEdit(category._id))
                               }
                             >
                               <Pencil className="mr-2 h-4 w-4" />
@@ -202,7 +219,7 @@ const BrandListPage = () => {
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
-                              onClick={() => setBrandToDelete(brand)}
+                              onClick={() => setCategoryToDelete(category)}
                               className="text-red-600 focus:text-red-700"
                             >
                               <Trash2 className="mr-2 h-4 w-4" />
@@ -221,18 +238,19 @@ const BrandListPage = () => {
       </div>
 
       <AlertDialog
-        open={!!brandToDelete}
-        onOpenChange={(open) => !open && setBrandToDelete(null)}
+        open={!!categoryToDelete}
+        onOpenChange={(open) => !open && setCategoryToDelete(null)}
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete brand?</AlertDialogTitle>
+            <AlertDialogTitle>Delete category?</AlertDialogTitle>
             <AlertDialogDescription>
               This will permanently delete{" "}
               <span className="font-medium text-foreground">
-                {brandToDelete?.name}
+                {categoryToDelete?.name}
               </span>
-              . If any products use this brand, deletion will be blocked.
+              . Deletion is blocked if it has sub-categories or assigned
+              products.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -251,4 +269,4 @@ const BrandListPage = () => {
   );
 };
 
-export default BrandListPage;
+export default CategoryListPage;

@@ -1,78 +1,84 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { brandApi } from "@/api/brandApi";
+import { categoryApi } from "@/api/categoryApi";
 import { APP_ROUTES } from "@/routes/appRoutes";
 import PageMeta from "@/meta/PageMeta";
 import { PAGE_META_DATA } from "@/meta/pageMetaData";
-import type { CreateBrandInput, Brand } from "@/types/brand";
+import type { Category, CreateCategoryInput } from "@/types/category";
 import { ArrowLeft } from "lucide-react";
 
-const CreateBrandPage = () => {
+const CreateCategoryPage = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const [form, setForm] = useState<CreateBrandInput>({
+  const [form, setForm] = useState<CreateCategoryInput>({
     name: "",
+    parent: null,
     description: "",
   });
   const [error, setError] = useState<string | null>(null);
-  const [createdBrand, setCreatedBrand] = useState<Brand | null>(null);
+  const [createdCategory, setCreatedCategory] = useState<Category | null>(null);
 
-  const { mutate: createBrand, isPending } = useMutation({
-    mutationFn: (input: CreateBrandInput) => brandApi.createBrand(input),
-    onSuccess: (brand) => {
-      queryClient.invalidateQueries({ queryKey: ["brand"] });
-      toast.success("Brand created. You can now add a logo.");
-      setCreatedBrand(brand);
+  const { data: allCategories = [] } = useQuery({
+    queryKey: ["category", "list"],
+    queryFn: () => categoryApi.getAllCategories(),
+  });
+
+  const { mutate: createCategory, isPending } = useMutation({
+    mutationFn: (input: CreateCategoryInput) =>
+      categoryApi.createCategory(input),
+    onSuccess: (category) => {
+      queryClient.invalidateQueries({ queryKey: ["category"] });
+      toast.success("Category created.");
+      setCreatedCategory(category);
     },
     onError: (err: { message: string }) => {
-      setError(err.message ?? "Failed to create brand. Please try again.");
+      setError(err.message ?? "Failed to create category. Please try again.");
     },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-
-    if (!form.name) {
-      setError("Brand name is required.");
+    if (!form.name.trim()) {
+      setError("Category name is required.");
       return;
     }
-
-    createBrand(form);
+    createCategory(form);
   };
 
-  // Once created, switch to showing the logo upload step using the
-  // existing brand-detail editing experience for consistency, rather
-  // than duplicating upload logic here.
-  if (createdBrand) {
+  if (createdCategory) {
     return (
       <div className="space-y-6">
         <div>
           <h1 className="text-xl font-semibold text-foreground">
-            Brand created
+            Category created
           </h1>
           <p className="text-sm text-muted-foreground mt-0.5">
-            {createdBrand.name} has been added. You can add a logo now or later
-            from the brand's edit page.
+            {createdCategory.name} has been added. You can add an image now or
+            later from the category's edit page.
           </p>
         </div>
-
         <div className="flex gap-3">
           <Button
-            onClick={() => navigate(APP_ROUTES.brandEdit(createdBrand._id))}
+            onClick={() =>
+              navigate(APP_ROUTES.categoryEdit(createdCategory._id))
+            }
           >
-            Add a logo
+            Add an image
           </Button>
-          <Button variant="outline" onClick={() => navigate(APP_ROUTES.brand)}>
-            Skip, go to brand list
+          <Button
+            variant="outline"
+            onClick={() => navigate(APP_ROUTES.category)}
+          >
+            Skip, go to category list
           </Button>
         </div>
       </div>
@@ -82,8 +88,8 @@ const CreateBrandPage = () => {
   return (
     <>
       <PageMeta
-        title={PAGE_META_DATA.brandNew.title}
-        description={PAGE_META_DATA.brandNew.description}
+        title={PAGE_META_DATA.categoryNew.title}
+        description={PAGE_META_DATA.categoryNew.description}
       />
 
       <div className="space-y-6">
@@ -91,14 +97,16 @@ const CreateBrandPage = () => {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => navigate(APP_ROUTES.brand)}
+            onClick={() => navigate(APP_ROUTES.category)}
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div>
-            <h1 className="text-xl font-semibold text-foreground">Add brand</h1>
+            <h1 className="text-xl font-semibold text-foreground">
+              Add category
+            </h1>
             <p className="text-sm text-muted-foreground mt-0.5">
-              Create a new brand
+              Create a new category
             </p>
           </div>
         </div>
@@ -114,7 +122,7 @@ const CreateBrandPage = () => {
           )}
           <CardHeader className="pb-4 border-b">
             <h2 className="text-sm font-medium text-foreground">
-              Brand details
+              Category details
             </h2>
           </CardHeader>
           <CardContent className="pt-6">
@@ -127,11 +135,11 @@ const CreateBrandPage = () => {
 
               <div className="space-y-1.5 max-w-md">
                 <Label htmlFor="name">
-                  Brand name <span className="text-destructive">*</span>
+                  Category name <span className="text-destructive">*</span>
                 </Label>
                 <Input
                   id="name"
-                  placeholder="HP"
+                  placeholder="e.g. Laptops"
                   value={form.name}
                   onChange={(e) =>
                     setForm((prev) => ({ ...prev, name: e.target.value }))
@@ -140,11 +148,34 @@ const CreateBrandPage = () => {
                 />
               </div>
 
+              <div className="space-y-1.5 max-w-md">
+                <Label htmlFor="parent">Parent category</Label>
+                <select
+                  id="parent"
+                  value={form.parent ?? ""}
+                  onChange={(e) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      parent: e.target.value || null,
+                    }))
+                  }
+                  disabled={isPending}
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50"
+                >
+                  <option value="">None (root category)</option>
+                  {allCategories.map((c) => (
+                    <option key={c._id} value={c._id}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               <div className="space-y-1.5">
                 <Label htmlFor="description">Description</Label>
                 <Textarea
                   id="description"
-                  placeholder="A short description of this brand"
+                  placeholder="A short description of this category"
                   value={form.description}
                   onChange={(e) =>
                     setForm((prev) => ({
@@ -161,13 +192,13 @@ const CreateBrandPage = () => {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => navigate(APP_ROUTES.brand)}
+                  onClick={() => navigate(APP_ROUTES.category)}
                   disabled={isPending}
                 >
                   Cancel
                 </Button>
                 <Button type="submit" disabled={isPending}>
-                  {isPending ? "Creating…" : "Create brand"}
+                  {isPending ? "Creating…" : "Create category"}
                 </Button>
               </div>
             </form>
@@ -178,4 +209,4 @@ const CreateBrandPage = () => {
   );
 };
 
-export default CreateBrandPage;
+export default CreateCategoryPage;

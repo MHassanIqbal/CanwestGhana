@@ -30,4 +30,13 @@ export const ENDPOINTS = {
     delete: (id: string) => `/brand/${id}`,
     uploadLogo: (id: string) => `/brand/${id}/logo`,
   },
+
+  category: {
+    getAll: "/category",
+    getById: (id: string) => `/category/${id}`,
+    create: "/category",
+    update: (id: string) => `/category/${id}`,
+    delete: (id: string) => `/category/${id}`,
+    uploadImage: (id: string) => `/category/${id}/image`,
+  },
 } as const;

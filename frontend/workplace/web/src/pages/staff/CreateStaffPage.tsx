@@ -114,7 +114,6 @@ const CreateStaffPage = () => {
                 </div>
               )}
 
-              {/* Name row: first / middle / last, weighted so first and last get more room */}
               <div className="grid grid-cols-12 gap-4">
                 <div className="col-span-4 space-y-1.5">
                   <Label htmlFor="firstName">

@@ -28,6 +28,7 @@ import {
   User,
   Tag,
   Building2,
+  Layers,
 } from "lucide-react";
 import { staffApi } from "@/api/staffApi";
 import { useAuth } from "@/hooks/useAuth";
@@ -46,6 +47,7 @@ const AppSidebar = () => {
   const { currentUser } = useAuth();
 
   const isAdmin = currentUser?.role === "admin";
+  const isManager = currentUser?.role === "manager";
 
   const { mutate: logout } = useMutation({
     mutationFn: () => staffApi.logout(),
@@ -125,7 +127,16 @@ const AppSidebar = () => {
                     <span>Company</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
 
+        {(isAdmin || isManager) && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Ecommerce</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
                 <SidebarMenuItem>
                   <SidebarMenuButton
                     isActive={location.pathname === APP_ROUTES.brand}
@@ -137,6 +148,16 @@ const AppSidebar = () => {
                 </SidebarMenuItem>
               </SidebarMenu>
             </SidebarGroupContent>
+
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                isActive={location.pathname === APP_ROUTES.category}
+                onClick={() => navigate(APP_ROUTES.category)}
+              >
+                <Layers />
+                <span>Category</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
           </SidebarGroup>
         )}
       </SidebarContent>

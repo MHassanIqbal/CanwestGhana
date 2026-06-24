@@ -7,111 +7,114 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { brandApi } from "@/api/brandApi";
+import { categoryApi } from "@/api/categoryApi";
 import { APP_ROUTES } from "@/routes/appRoutes";
 import InlineLoader from "@/components/loader/InlineLoader";
 import PageMeta from "@/meta/PageMeta";
 import { PAGE_META_DATA } from "@/meta/pageMetaData";
-import type { Brand, UpdateBrandInput } from "@/types/brand";
+import type { Category, UpdateCategoryInput } from "@/types/category";
 import { ArrowLeft, Pencil } from "lucide-react";
 
-const EditBrandPage = () => {
+const EditCategoryPage = () => {
   const { id } = useParams<{ id: string }>();
 
   const {
-    data: brand,
+    data: category,
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["brand", id],
-    queryFn: () => brandApi.getBrandById(id!),
+    queryKey: ["category", id],
+    queryFn: () => categoryApi.getCategoryById(id!),
     enabled: !!id,
   });
 
-  if (isLoading) {
-    return <InlineLoader text="Loading brand…" />;
-  }
+  if (isLoading) return <InlineLoader text="Loading category…" />;
+  if (isError || !category)
+    return <p className="text-sm text-destructive">Category not found.</p>;
 
-  if (isError || !brand) {
-    return <p className="text-sm text-destructive">Brand not found.</p>;
-  }
-
-  return <EditBrandForm brand={brand} />;
+  return <EditCategoryForm category={category} />;
 };
 
-const EditBrandForm = ({ brand }: { brand: Brand }) => {
+const EditCategoryForm = ({ category }: { category: Category }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-  const [form, setForm] = useState<UpdateBrandInput>({
-    name: brand.name,
-    description: brand.description ?? "",
-    isActive: brand.isActive,
+  const [form, setForm] = useState<UpdateCategoryInput>({
+    name: category.name,
+    parent: category.parent ?? null,
+    description: category.description ?? "",
+    isActive: category.isActive,
   });
-  const [logoFile, setLogoFile] = useState<File | null>(null);
-  const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const { mutate: updateBrand, isPending } = useMutation({
-    mutationFn: (input: UpdateBrandInput) =>
-      brandApi.updateBrand(brand._id, input),
+  // All categories for the parent dropdown — filter out self to prevent
+  // direct self-assignment (backend also blocks this, but UX-first).
+  const { data: allCategories = [] } = useQuery({
+    queryKey: ["category", "list"],
+    queryFn: () => categoryApi.getAllCategories(),
+  });
+  const parentOptions = allCategories.filter((c) => c._id !== category._id);
+
+  const { mutate: updateCategory, isPending } = useMutation({
+    mutationFn: (input: UpdateCategoryInput) =>
+      categoryApi.updateCategory(category._id, input),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["brand"] });
-      toast.success("Brand updated.");
-      navigate(APP_ROUTES.brand);
+      queryClient.invalidateQueries({ queryKey: ["category"] });
+      toast.success("Category updated.");
+      navigate(APP_ROUTES.category);
     },
     onError: (err: { message: string }) => {
       setError(err.message ?? "Update failed.");
     },
   });
 
-  const { mutate: uploadLogo, isPending: isUploadingLogo } = useMutation({
-    mutationFn: (file: File) => brandApi.uploadLogo(brand._id, file),
+  const { mutate: uploadImage, isPending: isUploadingImage } = useMutation({
+    mutationFn: (file: File) => categoryApi.uploadImage(category._id, file),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["brand"] });
-      toast.success("Logo updated.");
-      setLogoFile(null);
-      setLogoPreview(null);
+      queryClient.invalidateQueries({ queryKey: ["category"] });
+      toast.success("Image updated.");
+      setImageFile(null);
+      setImagePreview(null);
     },
     onError: (err: { message: string }) => {
-      toast.error(err.message ?? "Failed to upload logo.");
+      toast.error(err.message ?? "Failed to upload image.");
     },
   });
 
-  const handleLogoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    setLogoFile(file);
-    setLogoPreview(URL.createObjectURL(file));
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
   };
 
-  const handleLogoUpload = () => {
-    if (logoFile) uploadLogo(logoFile);
+  const handleImageUpload = () => {
+    if (imageFile) uploadImage(imageFile);
   };
 
-  const handleCancelLogo = () => {
-    setLogoFile(null);
-    setLogoPreview(null);
+  const handleCancelImage = () => {
+    setImageFile(null);
+    setImagePreview(null);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-
-    if (!form.name) {
-      setError("Brand name is required.");
+    if (!form.name?.trim()) {
+      setError("Category name is required.");
       return;
     }
-
-    updateBrand(form);
+    updateCategory(form);
   };
 
   return (
     <>
       <PageMeta
-        title={PAGE_META_DATA.brandEdit.title}
-        description={PAGE_META_DATA.brandEdit.description}
+        title={PAGE_META_DATA.categoryEdit.title}
+        description={PAGE_META_DATA.categoryEdit.description}
       />
 
       <div className="space-y-6">
@@ -119,23 +122,22 @@ const EditBrandForm = ({ brand }: { brand: Brand }) => {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => navigate(APP_ROUTES.brand)}
+            onClick={() => navigate(APP_ROUTES.category)}
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div>
             <h1 className="text-xl font-semibold text-foreground">
-              {brand.name}
+              {category.name}
             </h1>
             <p className="text-sm text-muted-foreground mt-0.5">
-              Edit brand details
+              Edit category details
             </p>
           </div>
         </div>
 
-        {/* Logo — same click-to-upload pattern as Company */}
         <Card className="shadow-sm relative">
-          {isUploadingLogo && (
+          {isUploadingImage && (
             <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/60 backdrop-blur-[2px] rounded-lg">
               <div className="flex items-center gap-2">
                 <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
@@ -146,26 +148,26 @@ const EditBrandForm = ({ brand }: { brand: Brand }) => {
             </div>
           )}
           <CardHeader className="pb-4 border-b">
-            <h2 className="text-sm font-medium text-foreground">Logo</h2>
+            <h2 className="text-sm font-medium text-foreground">Image</h2>
           </CardHeader>
           <CardContent className="pt-6">
             <div className="flex items-center gap-5">
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                disabled={isUploadingLogo}
+                disabled={isUploadingImage}
                 className="group relative h-20 w-20 rounded-lg border border-border overflow-hidden bg-muted shrink-0 disabled:cursor-not-allowed"
               >
-                {logoPreview || brand.logoUrl ? (
+                {imagePreview || category.imageUrl ? (
                   <img
-                    src={logoPreview ?? brand.logoUrl}
-                    alt={brand.name}
+                    src={imagePreview ?? category.imageUrl}
+                    alt={category.name}
                     className="h-full w-full object-contain"
                   />
                 ) : (
                   <div className="h-full w-full flex items-center justify-center">
                     <span className="text-xs text-muted-foreground">
-                      No logo
+                      No image
                     </span>
                   </div>
                 )}
@@ -178,30 +180,30 @@ const EditBrandForm = ({ brand }: { brand: Brand }) => {
                 ref={fileInputRef}
                 type="file"
                 accept="image/*"
-                onChange={handleLogoSelect}
+                onChange={handleImageSelect}
                 className="hidden"
               />
 
               <div className="flex-1 space-y-2">
                 <p className="text-sm text-foreground">
-                  Click the logo to choose a new image.
+                  Click the image to choose a new one.
                 </p>
-                {logoFile && (
+                {imageFile && (
                   <div className="flex items-center gap-2">
                     <Button
                       type="button"
                       size="sm"
-                      onClick={handleLogoUpload}
-                      disabled={isUploadingLogo}
+                      onClick={handleImageUpload}
+                      disabled={isUploadingImage}
                     >
-                      {isUploadingLogo ? "Uploading…" : "Save logo"}
+                      {isUploadingImage ? "Uploading…" : "Save image"}
                     </Button>
                     <Button
                       type="button"
                       size="sm"
                       variant="outline"
-                      onClick={handleCancelLogo}
-                      disabled={isUploadingLogo}
+                      onClick={handleCancelImage}
+                      disabled={isUploadingImage}
                     >
                       Cancel
                     </Button>
@@ -212,7 +214,6 @@ const EditBrandForm = ({ brand }: { brand: Brand }) => {
           </CardContent>
         </Card>
 
-        {/* Details */}
         <Card className="shadow-sm relative">
           {isPending && (
             <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/60 backdrop-blur-[2px] rounded-lg">
@@ -224,7 +225,7 @@ const EditBrandForm = ({ brand }: { brand: Brand }) => {
           )}
           <CardHeader className="pb-4 border-b">
             <h2 className="text-sm font-medium text-foreground">
-              Brand details
+              Category details
             </h2>
           </CardHeader>
           <CardContent className="pt-6">
@@ -237,7 +238,7 @@ const EditBrandForm = ({ brand }: { brand: Brand }) => {
 
               <div className="space-y-1.5 max-w-md">
                 <Label htmlFor="name">
-                  Brand name <span className="text-destructive">*</span>
+                  Category name <span className="text-destructive">*</span>
                 </Label>
                 <Input
                   id="name"
@@ -247,6 +248,33 @@ const EditBrandForm = ({ brand }: { brand: Brand }) => {
                   }
                   disabled={isPending}
                 />
+              </div>
+
+              <div className="space-y-1.5 max-w-md">
+                <Label htmlFor="parent">Parent category</Label>
+                <select
+                  id="parent"
+                  value={form.parent ?? ""}
+                  onChange={(e) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      parent: e.target.value || null,
+                    }))
+                  }
+                  disabled={isPending}
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50"
+                >
+                  <option value="">None (root category)</option>
+                  {parentOptions.map((c) => (
+                    <option key={c._id} value={c._id}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+                <p className="text-xs text-muted-foreground">
+                  The current category is excluded. Circular assignments are
+                  blocked.
+                </p>
               </div>
 
               <div className="space-y-1.5">
@@ -288,7 +316,7 @@ const EditBrandForm = ({ brand }: { brand: Brand }) => {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => navigate(APP_ROUTES.brand)}
+                  onClick={() => navigate(APP_ROUTES.category)}
                   disabled={isPending}
                 >
                   Cancel
@@ -305,4 +333,4 @@ const EditBrandForm = ({ brand }: { brand: Brand }) => {
   );
 };
 
-export default EditBrandPage;
+export default EditCategoryPage;

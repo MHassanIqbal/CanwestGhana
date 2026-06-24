@@ -19,21 +19,25 @@ const router = express.Router();
 router.route("/").get(getAllBrands);
 router.route("/:id").get(getBrandById);
 
-// Admin-only writes
+// Admin and Manager writes
 router
   .route("/")
-  .post(isStaffAuthenticated, authorizeRoles("admin"), createBrand);
+  .post(isStaffAuthenticated, authorizeRoles("admin", "manager"), createBrand);
 
 router
   .route("/:id")
-  .put(isStaffAuthenticated, authorizeRoles("admin"), updateBrand)
-  .delete(isStaffAuthenticated, authorizeRoles("admin"), deleteBrand);
+  .put(isStaffAuthenticated, authorizeRoles("admin", "manager"), updateBrand)
+  .delete(
+    isStaffAuthenticated,
+    authorizeRoles("admin", "manager"),
+    deleteBrand,
+  );
 
 router
   .route("/:id/logo")
   .put(
     isStaffAuthenticated,
-    authorizeRoles("admin"),
+    authorizeRoles("admin", "manager"),
     upload.single("logo"),
     uploadBrandLogo,
   );

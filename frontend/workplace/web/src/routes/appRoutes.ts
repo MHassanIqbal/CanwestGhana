@@ -12,5 +12,9 @@ export const APP_ROUTES = {
 
   brand: "/brand",
   brandNew: "/brand/new",
-  brandDetail: (id: string) => `/brand/${id}`,
+  brandEdit: (id: string) => `/brand/${id}`,
+
+  category: "/category",
+  categoryNew: "/category/new",
+  categoryEdit: (id: string) => `/category/${id}`,
 } as const;

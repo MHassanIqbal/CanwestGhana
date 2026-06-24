@@ -18,11 +18,25 @@ const useHeaderTitle = (): string => {
     return stripSuffix(PAGE_META_DATA.staffNew.title);
   if (id && path === APP_ROUTES.staffEdit(id))
     return stripSuffix(PAGE_META_DATA.staffEdit.title);
+
   if (path === APP_ROUTES.profile)
     return stripSuffix(PAGE_META_DATA.profile.title);
 
   if (path === APP_ROUTES.company)
     return stripSuffix(PAGE_META_DATA.company.title);
+
+  if (path === APP_ROUTES.brand) return stripSuffix(PAGE_META_DATA.brand.title);
+  if (path === APP_ROUTES.brandNew)
+    return stripSuffix(PAGE_META_DATA.brandNew.title);
+  if (id && path === APP_ROUTES.brandEdit(id))
+    return stripSuffix(PAGE_META_DATA.brandEdit.title);
+
+  if (path === APP_ROUTES.category)
+    return stripSuffix(PAGE_META_DATA.category.title);
+  if (path === APP_ROUTES.categoryNew)
+    return stripSuffix(PAGE_META_DATA.categoryNew.title);
+  if (id && path === APP_ROUTES.categoryEdit(id))
+    return stripSuffix(PAGE_META_DATA.categoryEdit.title);
 
   return "Workplace";
 };
