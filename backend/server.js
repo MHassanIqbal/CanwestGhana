@@ -18,6 +18,7 @@ import staffRoutes from "./routes/staffRoutes.js";
 import companyRoutes from "./routes/companyRoutes.js";
 import brandRoutes from "./routes/brandRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
+import locationRoutes from "./routes/locationRoutes.js";
 
 // Init Express
 const server = express();
@@ -55,6 +56,7 @@ server.use("/api/staff", staffRoutes);
 server.use("/api/company", companyRoutes);
 server.use("/api/brand", brandRoutes);
 server.use("/api/category", categoryRoutes);
+server.use("/api/location", locationRoutes);
 
 // Init Error Middleware
 server.use(errorMiddlewares);

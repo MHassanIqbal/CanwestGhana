@@ -29,6 +29,7 @@ import {
   Tag,
   Building2,
   Layers,
+  Warehouse,
 } from "lucide-react";
 import { staffApi } from "@/api/staffApi";
 import { useAuth } from "@/hooks/useAuth";
@@ -134,7 +135,7 @@ const AppSidebar = () => {
 
         {(isAdmin || isManager) && (
           <SidebarGroup>
-            <SidebarGroupLabel>Ecommerce</SidebarGroupLabel>
+            <SidebarGroupLabel>Catalog</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 <SidebarMenuItem>
@@ -146,18 +147,39 @@ const AppSidebar = () => {
                     <span>Brand</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
+
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    isActive={location.pathname === APP_ROUTES.category}
+                    onClick={() => navigate(APP_ROUTES.category)}
+                  >
+                    <Layers />
+                    <span>Category</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+
+                {/* Product goes here once built */}
               </SidebarMenu>
             </SidebarGroupContent>
+          </SidebarGroup>
+        )}
 
-            <SidebarMenuItem>
-              <SidebarMenuButton
-                isActive={location.pathname === APP_ROUTES.category}
-                onClick={() => navigate(APP_ROUTES.category)}
-              >
-                <Layers />
-                <span>Category</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+        {isAdmin && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Inventory</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    isActive={location.pathname === APP_ROUTES.location}
+                    onClick={() => navigate(APP_ROUTES.location)}
+                  >
+                    <Warehouse />
+                    <span>Location</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
           </SidebarGroup>
         )}
       </SidebarContent>

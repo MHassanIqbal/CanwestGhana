@@ -20,6 +20,9 @@ import EditBrandPage from "./pages/brand/EditBrandPage";
 import CategoryListPage from "./pages/category/CategoryListPage";
 import CreateCategoryPage from "./pages/category/CreateCategoryPage";
 import EditCategoryPage from "./pages/category/EditCategoryPage";
+import LocationListPage from "./pages/location/LocationListPage";
+import CreateLocationPage from "./pages/location/CreateLocationPage";
+import EditLocationPage from "./pages/location/EditLocationPage";
 
 const App = () => {
   return (
@@ -57,6 +60,16 @@ const AppWrapper = () => {
             />
 
             <Route path={APP_ROUTES.company} element={<CompanyPage />} />
+
+            <Route path={APP_ROUTES.location} element={<LocationListPage />} />
+            <Route
+              path={APP_ROUTES.locationNew}
+              element={<CreateLocationPage />}
+            />
+            <Route
+              path={APP_ROUTES.locationEdit(":id")}
+              element={<EditLocationPage />}
+            />
           </Route>
 
           <Route element={<RoleGuard allowedRoles={["admin", "manager"]} />}>

@@ -17,4 +17,8 @@ export const APP_ROUTES = {
   category: "/category",
   categoryNew: "/category/new",
   categoryEdit: (id: string) => `/category/${id}`,
+
+  location: "/location",
+  locationNew: "/location/new",
+  locationEdit: (id: string) => `/location/${id}`,
 } as const;

@@ -39,4 +39,12 @@ export const ENDPOINTS = {
     delete: (id: string) => `/category/${id}`,
     uploadImage: (id: string) => `/category/${id}/image`,
   },
+
+  location: {
+    getAll: "/location",
+    getById: (id: string) => `/location/${id}`,
+    create: "/location",
+    update: (id: string) => `/location/${id}`,
+    delete: (id: string) => `/location/${id}`,
+  },
 } as const;

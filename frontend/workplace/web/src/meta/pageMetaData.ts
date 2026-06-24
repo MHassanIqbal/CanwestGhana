@@ -66,4 +66,17 @@ export const PAGE_META_DATA = {
     title: "Edit Category | Canwest Ghana",
     description: "Edit category details",
   },
+
+  location: {
+    title: "Locations | Canwest Ghana",
+    description: "Manage warehouses and branches",
+  },
+  locationNew: {
+    title: "Add Location | Canwest Ghana",
+    description: "Create a new warehouse or branch",
+  },
+  locationEdit: {
+    title: "Edit Location | Canwest Ghana",
+    description: "Edit location details",
+  },
 } as const;
