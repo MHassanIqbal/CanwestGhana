@@ -30,6 +30,7 @@ import {
   Building2,
   Layers,
   Warehouse,
+  Package,
 } from "lucide-react";
 import { staffApi } from "@/api/staffApi";
 import { useAuth } from "@/hooks/useAuth";
@@ -158,7 +159,15 @@ const AppSidebar = () => {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
 
-                {/* Product goes here once built */}
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    isActive={location.pathname === APP_ROUTES.product}
+                    onClick={() => navigate(APP_ROUTES.product)}
+                  >
+                    <Package />
+                    <span>Product</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>

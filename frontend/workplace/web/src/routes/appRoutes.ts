@@ -21,4 +21,12 @@ export const APP_ROUTES = {
   location: "/location",
   locationNew: "/location/new",
   locationEdit: (id: string) => `/location/${id}`,
+
+  product: "/product",
+  productNew: "/product/new",
+  productEdit: (id: string) => `/product/${id}`,
+
+  productVariantNew: (productId: string) => `/product/${productId}/variant/new`,
+  productVariantEdit: (productId: string, variantId: string) =>
+    `/product/${productId}/variant/${variantId}`,
 } as const;

@@ -79,4 +79,26 @@ export const PAGE_META_DATA = {
     title: "Edit Location | Canwest Ghana",
     description: "Edit location details",
   },
+
+  product: {
+    title: "Products | Canwest Ghana",
+    description: "Manage products",
+  },
+  productNew: {
+    title: "Add Product | Canwest Ghana",
+    description: "Create a new product",
+  },
+  productEdit: {
+    title: "Edit Product | Canwest Ghana",
+    description: "Edit product details and variants",
+  },
+
+  productVariantNew: {
+    title: "Add Variant | Canwest Ghana",
+    description: "Create a new product variant",
+  },
+  productVariantEdit: {
+    title: "Edit Variant | Canwest Ghana",
+    description: "Edit variant details and stock",
+  },
 } as const;

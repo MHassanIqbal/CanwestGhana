@@ -47,4 +47,24 @@ export const ENDPOINTS = {
     update: (id: string) => `/location/${id}`,
     delete: (id: string) => `/location/${id}`,
   },
+
+  product: {
+    getAll: "/product",
+    getById: (id: string) => `/product/${id}`,
+    create: "/product",
+    update: (id: string) => `/product/${id}`,
+    delete: (id: string) => `/product/${id}`,
+    addImage: (id: string) => `/product/${id}/image`,
+    removeImage: (id: string) => `/product/${id}/image`,
+  },
+
+  productVariant: {
+    getAll: "/product-variant",
+    getById: (id: string) => `/product-variant/${id}`,
+    create: "/product-variant",
+    update: (id: string) => `/product-variant/${id}`,
+    delete: (id: string) => `/product-variant/${id}`,
+    adjustStock: (id: string) => `/product-variant/${id}/stock`,
+    uploadImage: (id: string) => `/product-variant/${id}/image`,
+  },
 } as const;

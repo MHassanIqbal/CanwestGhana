@@ -23,6 +23,11 @@ import EditCategoryPage from "./pages/category/EditCategoryPage";
 import LocationListPage from "./pages/location/LocationListPage";
 import CreateLocationPage from "./pages/location/CreateLocationPage";
 import EditLocationPage from "./pages/location/EditLocationPage";
+import CreateProductPage from "./pages/product/CreateProductPage";
+import EditProductPage from "./pages/product/EditProductPage";
+import ProductListPage from "./pages/product/ProductListPage";
+import CreateVariantPage from "./pages/product/CreateVariantPage";
+import EditVariantPage from "./pages/product/EditVariantPage";
 
 const App = () => {
   return (
@@ -88,6 +93,25 @@ const AppWrapper = () => {
             <Route
               path={APP_ROUTES.categoryEdit(":id")}
               element={<EditCategoryPage />}
+            />
+
+            <Route path={APP_ROUTES.product} element={<ProductListPage />} />
+            <Route
+              path={APP_ROUTES.productNew}
+              element={<CreateProductPage />}
+            />
+            <Route
+              path={APP_ROUTES.productEdit(":id")}
+              element={<EditProductPage />}
+            />
+
+            <Route
+              path={APP_ROUTES.productVariantNew(":id")}
+              element={<CreateVariantPage />}
+            />
+            <Route
+              path={APP_ROUTES.productVariantEdit(":id", ":variantId")}
+              element={<EditVariantPage />}
             />
           </Route>
 

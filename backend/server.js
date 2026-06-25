@@ -19,6 +19,8 @@ import companyRoutes from "./routes/companyRoutes.js";
 import brandRoutes from "./routes/brandRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import locationRoutes from "./routes/locationRoutes.js";
+import productRoutes from "./routes/productRoutes.js";
+import productVariantRoutes from "./routes/productVariantRoutes.js";
 
 // Init Express
 const server = express();
@@ -57,6 +59,8 @@ server.use("/api/company", companyRoutes);
 server.use("/api/brand", brandRoutes);
 server.use("/api/category", categoryRoutes);
 server.use("/api/location", locationRoutes);
+server.use("/api/product", productRoutes);
+server.use("/api/product-variant", productVariantRoutes);
 
 // Init Error Middleware
 server.use(errorMiddlewares);
