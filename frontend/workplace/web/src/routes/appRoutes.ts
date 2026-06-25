@@ -29,4 +29,6 @@ export const APP_ROUTES = {
   productVariantNew: (productId: string) => `/product/${productId}/variant/new`,
   productVariantEdit: (productId: string, variantId: string) =>
     `/product/${productId}/variant/${variantId}`,
+
+  priceList: "/price-list",
 } as const;

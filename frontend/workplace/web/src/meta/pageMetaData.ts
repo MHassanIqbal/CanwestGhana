@@ -101,4 +101,9 @@ export const PAGE_META_DATA = {
     title: "Edit Variant | Canwest Ghana",
     description: "Edit variant details and stock",
   },
+
+  priceList: {
+    title: "Price List | Canwest Ghana",
+    description: "Browse and check product prices, rate, and tax",
+  },
 } as const;

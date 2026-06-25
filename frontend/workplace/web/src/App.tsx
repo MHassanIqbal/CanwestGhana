@@ -28,6 +28,7 @@ import EditProductPage from "./pages/product/EditProductPage";
 import ProductListPage from "./pages/product/ProductListPage";
 import CreateVariantPage from "./pages/product/CreateVariantPage";
 import EditVariantPage from "./pages/product/EditVariantPage";
+import PriceListPage from "./pages/priceList/PriceListPage";
 
 const App = () => {
   return (
@@ -55,6 +56,8 @@ const AppWrapper = () => {
       <Route element={<ProtectedLayout />}>
         <Route element={<AppLayout />}>
           <Route index element={<DashboardPage />} />
+
+          <Route path={APP_ROUTES.priceList} element={<PriceListPage />} />
 
           <Route element={<RoleGuard allowedRoles={["admin"]} />}>
             <Route path={APP_ROUTES.staff} element={<StaffListPage />} />

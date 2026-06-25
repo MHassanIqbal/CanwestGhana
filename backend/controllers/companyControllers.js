@@ -11,6 +11,7 @@ export const getCompany = catchAsyncErrors(async (req, res, next) => {
     company = await Company.create({
       companyName: process.env.DEFAULT_COMPANY_NAME,
       usdToGhsRate: parseFloat(process.env.DEFAULT_USD_TO_GHS_RATE),
+      taxRate: parseFloat(process.env.DEFAULT_TAX_RATE),
     });
   }
 

@@ -38,6 +38,23 @@ const useHeaderTitle = (): string => {
   if (id && path === APP_ROUTES.categoryEdit(id))
     return stripSuffix(PAGE_META_DATA.categoryEdit.title);
 
+  if (path === APP_ROUTES.priceList)
+    return stripSuffix(PAGE_META_DATA.priceList.title);
+
+  if (path === APP_ROUTES.product)
+    return stripSuffix(PAGE_META_DATA.product.title);
+  if (path === APP_ROUTES.productNew)
+    return stripSuffix(PAGE_META_DATA.productNew.title);
+  if (id && path === APP_ROUTES.productEdit(id))
+    return stripSuffix(PAGE_META_DATA.productEdit.title);
+
+  if (path === APP_ROUTES.location)
+    return stripSuffix(PAGE_META_DATA.location.title);
+  if (path === APP_ROUTES.locationNew)
+    return stripSuffix(PAGE_META_DATA.locationNew.title);
+  if (id && path === APP_ROUTES.locationEdit(id))
+    return stripSuffix(PAGE_META_DATA.locationEdit.title);
+
   return "Workplace";
 };
 

@@ -67,4 +67,8 @@ export const ENDPOINTS = {
     adjustStock: (id: string) => `/product-variant/${id}/stock`,
     uploadImage: (id: string) => `/product-variant/${id}/image`,
   },
+
+  priceList: {
+    getAll: "/price-list",
+  },
 } as const;

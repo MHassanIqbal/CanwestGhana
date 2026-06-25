@@ -31,6 +31,7 @@ import {
   Layers,
   Warehouse,
   Package,
+  Search,
 } from "lucide-react";
 import { staffApi } from "@/api/staffApi";
 import { useAuth } from "@/hooks/useAuth";
@@ -99,6 +100,16 @@ const AppSidebar = () => {
                 >
                   <LayoutDashboard />
                   <span>Dashboard</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  isActive={location.pathname === APP_ROUTES.priceList}
+                  onClick={() => navigate(APP_ROUTES.priceList)}
+                >
+                  <Search />
+                  <span>Price List</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
