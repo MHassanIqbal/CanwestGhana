@@ -106,4 +106,34 @@ export const PAGE_META_DATA = {
     title: "Price List | Canwest Ghana",
     description: "Browse and check product prices, rate, and tax",
   },
+
+  proforma: {
+    title: "Proforma Invoices | Canwest Ghana",
+    description: "Manage and issue proforma invoices",
+  },
+  proformaNew: {
+    title: "New Proforma Invoice | Canwest Ghana",
+    description: "Create a new proforma invoice",
+  },
+  proformaEdit: {
+    title: "Edit Proforma Invoice | Canwest Ghana",
+    description: "Edit a draft proforma invoice",
+  },
+  proformaVerify: {
+    title: "Verify Proforma | Canwest Ghana",
+    description: "Confirm a proforma was genuinely issued by Canwest Ghana",
+  },
+
+  customer: {
+    title: "Customers | Canwest Ghana",
+    description: "Manage customer records",
+  },
+  customerNew: {
+    title: "Add Customer | Canwest Ghana",
+    description: "Create a new customer record",
+  },
+  customerEdit: {
+    title: "Edit Customer | Canwest Ghana",
+    description: "Edit customer details",
+  },
 } as const;

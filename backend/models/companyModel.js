@@ -104,6 +104,12 @@ const companySchema = new mongoose.Schema(
 
     businessHours: businessHoursSchema,
 
+    defaultTerms: {
+      type: String,
+      trim: true,
+      default: null,
+    },
+
     // Tracks which admin last changed company settings — useful audit
     // trail given usdToGhsRate directly affects displayed pricing.
     updatedBy: {

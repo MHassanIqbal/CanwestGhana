@@ -207,6 +207,7 @@ const StaffListPage = () => {
                     <TableHead>Name</TableHead>
                     <TableHead>Email</TableHead>
                     <TableHead>Role</TableHead>
+                    <TableHead>Branch</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead className="w-12" />
                   </TableRow>
@@ -254,6 +255,10 @@ const StaffListPage = () => {
                           <Badge variant={roleBadgeVariant(staff.role)}>
                             {staff.role}
                           </Badge>
+                        </TableCell>
+
+                        <TableCell className="text-sm text-muted-foreground">
+                          {staff.branch?.name ?? "—"}
                         </TableCell>
 
                         <TableCell>

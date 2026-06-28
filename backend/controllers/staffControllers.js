@@ -27,6 +27,7 @@ export const createStaff = catchAsyncErrors(async (req, res, next) => {
     email,
     password,
     role,
+    branch: branch ?? null,
     createdBy: req.staff._id,
   });
 
@@ -79,7 +80,7 @@ export const logoutStaff = catchAsyncErrors(async (req, res, next) => {
 
 // Get profile
 export const getStaffProfile = catchAsyncErrors(async (req, res, next) => {
-  const staff = await Staff.findById(req.staff?.id);
+  const staff = await Staff.findById(req.staff?.id).populate("branch", "name");
   if (!staff) return next(new ErrorHandler("User not found", 404));
 
   res.status(200).json({ staff });
@@ -88,13 +89,16 @@ export const getStaffProfile = catchAsyncErrors(async (req, res, next) => {
 // Get all staff controller
 export const getAllStaff = catchAsyncErrors(async (req, res, next) => {
   const query = req.staff.role === "admin" ? {} : { createdBy: req.staff._id };
-  const allStaff = await Staff.find(query);
+  const allStaff = await Staff.find(query).populate("branch", "name address");
   res.status(200).json({ allStaff });
 });
 
 // Update staff controller
 export const updateStaff = catchAsyncErrors(async (req, res, next) => {
-  const staff = await Staff.findById(req.params.id);
+  const staff = await Staff.findById(req.params.id).populate(
+    "branch",
+    "name address",
+  );
   if (!staff) {
     return next(new ErrorHandler("Staff not found", 404));
   }
@@ -115,7 +119,7 @@ export const updateStaff = catchAsyncErrors(async (req, res, next) => {
 
   // Role can only be changed by an admin, never by the user themselves
   const updatableFields = ["firstName", "middleName", "lastName"];
-  if (isAdmin) updatableFields.push("role");
+  if (isAdmin) updatableFields.push("role", "branch");
 
   updatableFields.forEach((field) => {
     if (req.body[field] !== undefined) {
@@ -336,4 +340,26 @@ export const validateResetToken = catchAsyncErrors(async (req, res, next) => {
     );
 
   res.status(200).json({ message: "Request is valid" });
+});
+
+// Assign branch to staff controller
+export const assignBranch = catchAsyncErrors(async (req, res, next) => {
+  const staff = await Staff.findById(req.params.id);
+  if (!staff) return next(new ErrorHandler("Staff not found", 404));
+
+  if (req.staff.role !== "admin") {
+    return next(
+      new ErrorHandler("Only admins can assign branch to staff", 403),
+    );
+  }
+
+  // Allow null to unassign
+  staff.branch = req.body.branch ?? null;
+  await staff.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Branch assigned successfully",
+    staff,
+  });
 });

@@ -7,6 +7,7 @@ export interface Staff {
   lastName: string;
   email: string;
   role: StaffRole;
+  branch: { _id: string; name: string } | null;
   isActive: boolean;
   createdBy?: string;
   createdAt: string;
@@ -32,6 +33,7 @@ export interface CreateStaffInput {
   email: string;
   password: string;
   role: StaffRole;
+  branch?: string | null;
 }
 
 export interface UpdateStaffInput {
@@ -39,6 +41,7 @@ export interface UpdateStaffInput {
   middleName?: string;
   lastName?: string;
   role?: StaffRole;
+  branch?: string | null;
 }
 
 export interface ChangePasswordInput {

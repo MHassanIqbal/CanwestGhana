@@ -29,6 +29,13 @@ import ProductListPage from "./pages/product/ProductListPage";
 import CreateVariantPage from "./pages/product/CreateVariantPage";
 import EditVariantPage from "./pages/product/EditVariantPage";
 import PriceListPage from "./pages/priceList/PriceListPage";
+import ProformaListPage from "./pages/proforma/ProformaListPage";
+import CreateProformaPage from "./pages/proforma/CreateProformaPage";
+import CustomerListPage from "./pages/customer/CustomerListPage";
+import VerifyProformaPage from "./pages/proforma/VerifyProformaPage";
+import EditProformaPage from "./pages/proforma/EditProformaPage";
+import CreateCustomerPage from "./pages/customer/CreateCustomerPage";
+import EditCustomerPage from "./pages/customer/EditCustomerPage";
 
 const App = () => {
   return (
@@ -58,6 +65,30 @@ const AppWrapper = () => {
           <Route index element={<DashboardPage />} />
 
           <Route path={APP_ROUTES.priceList} element={<PriceListPage />} />
+
+          <Route path={APP_ROUTES.proforma} element={<ProformaListPage />} />
+          <Route
+            path={APP_ROUTES.proformaNew}
+            element={<CreateProformaPage />}
+          />
+          <Route
+            path={APP_ROUTES.proformaEdit(":id")}
+            element={<EditProformaPage />}
+          />
+          <Route
+            path={APP_ROUTES.proformaVerify(":token")}
+            element={<VerifyProformaPage />}
+          />
+
+          <Route path={APP_ROUTES.customer} element={<CustomerListPage />} />
+          <Route
+            path={APP_ROUTES.customerNew}
+            element={<CreateCustomerPage />}
+          />
+          <Route
+            path={APP_ROUTES.customerEdit(":id")}
+            element={<EditCustomerPage />}
+          />
 
           <Route element={<RoleGuard allowedRoles={["admin"]} />}>
             <Route path={APP_ROUTES.staff} element={<StaffListPage />} />

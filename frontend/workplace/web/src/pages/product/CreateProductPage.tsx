@@ -20,8 +20,10 @@ const CreateProductPage = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
+  // Swapped out 'name' for 'title' and added 'summary'
   const [form, setForm] = useState<CreateProductInput>({
-    name: "",
+    title: "",
+    summary: "",
     brand: "",
     category: "",
     description: "",
@@ -53,8 +55,10 @@ const CreateProductPage = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    if (!form.name.trim()) {
-      setError("Product name is required.");
+
+    // Updated validation tracking logic
+    if (!form.title.trim()) {
+      setError("Product title is required.");
       return;
     }
     if (!form.brand) {
@@ -116,16 +120,31 @@ const CreateProductPage = () => {
                 </div>
               )}
 
+              {/* Title Field */}
               <div className="space-y-1.5 max-w-md">
-                <Label htmlFor="name">
-                  Product name <span className="text-destructive">*</span>
+                <Label htmlFor="title">
+                  Product title <span className="text-destructive">*</span>
                 </Label>
                 <Input
-                  id="name"
-                  placeholder="e.g. ThinkPad X1 Carbon"
-                  value={form.name}
+                  id="title"
+                  placeholder="e.g. ThinkPad X1 Carbon Gen 11"
+                  value={form.title}
                   onChange={(e) =>
-                    setForm((prev) => ({ ...prev, name: e.target.value }))
+                    setForm((prev) => ({ ...prev, title: e.target.value }))
+                  }
+                  disabled={isPending}
+                />
+              </div>
+
+              {/* Summary Field */}
+              <div className="space-y-1.5 max-w-md">
+                <Label htmlFor="summary">Summary</Label>
+                <Input
+                  id="summary"
+                  placeholder="e.g. Ultralight 14-inch business laptop with carbon fiber top cover."
+                  value={form.summary}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, summary: e.target.value }))
                   }
                   disabled={isPending}
                 />
@@ -181,7 +200,7 @@ const CreateProductPage = () => {
                 <Label htmlFor="description">Description</Label>
                 <Textarea
                   id="description"
-                  placeholder="A short description of this product"
+                  placeholder="Detailed specifications, features, and deep overview..."
                   value={form.description}
                   onChange={(e) =>
                     setForm((prev) => ({
@@ -190,7 +209,7 @@ const CreateProductPage = () => {
                     }))
                   }
                   disabled={isPending}
-                  rows={3}
+                  rows={4} // Increased row depth slightly since there is a summary now
                 />
               </div>
 

@@ -22,6 +22,8 @@ import locationRoutes from "./routes/locationRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import productVariantRoutes from "./routes/productVariantRoutes.js";
 import priceListRoutes from "./routes/priceListRoutes.js";
+import customerRoutes from "./routes/customerRoutes.js";
+import proformaRoutes from "./routes/proformaRoutes.js";
 
 // Init Express
 const server = express();
@@ -63,6 +65,8 @@ server.use("/api/location", locationRoutes);
 server.use("/api/product", productRoutes);
 server.use("/api/product-variant", productVariantRoutes);
 server.use("/api/price-list", priceListRoutes);
+server.use("/api/customer", customerRoutes);
+server.use("/api/proforma", proformaRoutes);
 
 // Init Error Middleware
 server.use(errorMiddlewares);

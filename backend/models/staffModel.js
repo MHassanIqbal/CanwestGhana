@@ -70,6 +70,13 @@ const staffSchema = new mongoose.Schema(
       lowercase: true,
     },
 
+    branch: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Location",
+      default: null,
+      index: true, // looked up often once invoice visibility filters by it
+    },
+
     resetPasswordToken: {
       type: String,
       select: false,

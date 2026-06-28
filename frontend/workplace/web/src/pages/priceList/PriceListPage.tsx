@@ -128,16 +128,18 @@ const PriceListPage = () => {
                   </TableRow>
                 ) : (
                   results.map((result, index) => (
-                    <TableRow key={result.variantId}>
+                    <TableRow
+                      key={result.variantId ?? `product-${result.productId}`}
+                    >
                       <TableCell className="text-sm text-muted-foreground">
                         {index + 1}
                       </TableCell>
 
                       <TableCell
                         className="text-sm font-medium text-foreground truncate"
-                        title={result.sku}
+                        title={result.sku ?? undefined}
                       >
-                        {result.sku}
+                        {result.sku ?? "—"}
                       </TableCell>
 
                       <TableCell>
@@ -185,31 +187,48 @@ const PriceListPage = () => {
                       </TableCell>
 
                       <TableCell className="text-sm text-muted-foreground">
-                        ${result.priceUsd.toFixed(2)}
+                        {result.priceUsd != null
+                          ? `$${result.priceUsd.toFixed(2)}`
+                          : "—"}
                       </TableCell>
 
                       <TableCell className="text-sm text-muted-foreground">
-                        GHS {result.priceGhs.toFixed(2)}
+                        {result.priceGhs != null
+                          ? `GHS ${result.priceGhs.toFixed(2)}`
+                          : "—"}
                       </TableCell>
 
                       <TableCell className="text-sm font-medium text-foreground">
-                        ${result.priceUsdWithTax.toFixed(2)}
+                        {result.priceUsdWithTax != null
+                          ? `$${result.priceUsdWithTax.toFixed(2)}`
+                          : "—"}
                       </TableCell>
 
                       <TableCell className="text-sm font-medium text-foreground">
-                        GHS {result.priceGhsWithTax.toFixed(2)}
+                        {result.priceGhsWithTax != null
+                          ? `GHS ${result.priceGhsWithTax.toFixed(2)}`
+                          : "—"}
                       </TableCell>
 
                       <TableCell>
-                        <Badge
-                          className={
-                            result.totalStock > 0
-                              ? "bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-400"
-                              : "bg-red-100 text-red-800 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400"
-                          }
-                        >
-                          {result.totalStock}
-                        </Badge>
+                        {result.variantId ? (
+                          <Badge
+                            className={
+                              result.totalStock > 0
+                                ? "bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-400"
+                                : "bg-red-100 text-red-800 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400"
+                            }
+                          >
+                            {result.totalStock}
+                          </Badge>
+                        ) : (
+                          <Badge
+                            variant="outline"
+                            className="text-muted-foreground"
+                          >
+                            No variant
+                          </Badge>
+                        )}
                       </TableCell>
                     </TableRow>
                   ))

@@ -12,7 +12,10 @@ export const getAllVariants = catchAsyncErrors(async (req, res, next) => {
     filter.product = req.query.product;
   }
 
-  const variants = await ProductVariant.find(filter).sort({ sku: 1 });
+  const variants = await ProductVariant.find(filter)
+    .populate("product", "title description")
+    .sort({ sku: 1 });
+
   res.status(200).json({ variants });
 });
 

@@ -97,12 +97,16 @@ const ProfilePage = () => {
                 <p className="text-sm text-muted-foreground">
                   {currentUser?.email}
                 </p>
-                <Badge
-                  variant={roleBadgeVariant(currentUser?.role ?? "employee")}
-                  className="mt-2"
-                >
-                  {currentUser?.role}
-                </Badge>
+                <div className="flex items-center gap-2 mt-2">
+                  <Badge
+                    variant={roleBadgeVariant(currentUser?.role ?? "employee")}
+                  >
+                    {currentUser?.role}
+                  </Badge>
+                  {currentUser?.branch && (
+                    <Badge variant="outline">{currentUser.branch.name}</Badge>
+                  )}
+                </div>
               </div>
             </div>
           </CardContent>

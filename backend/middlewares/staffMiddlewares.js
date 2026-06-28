@@ -13,7 +13,7 @@ export const isStaffAuthenticated = catchAsyncErrors(async (req, res, next) => {
 
   const decodedData = jwt.verify(token, process.env.JWT_SECRET);
 
-  req.staff = await Staff.findById(decodedData.id);
+  req.staff = await Staff.findById(decodedData.id).populate("branch", "name");
 
   if (!req.staff) {
     return next(new ErrorHandler("User not found", 404));

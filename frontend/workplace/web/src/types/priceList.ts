@@ -4,18 +4,18 @@ export interface PriceListAttribute {
 }
 
 export interface PriceListResult {
-  variantId: string;
+  variantId: string | null; // null when the product has no variant yet
   productId: string;
   productName: string;
   brandName: string | null;
   categoryName: string | null;
-  sku: string;
+  sku: string | null;
   attributes: PriceListAttribute[];
   imageUrl: string | null;
-  priceUsd: number;
-  priceGhs: number;
-  priceUsdWithTax: number;
-  priceGhsWithTax: number;
+  priceUsd: number | null;
+  priceGhs: number | null;
+  priceUsdWithTax: number | null;
+  priceGhsWithTax: number | null;
   totalStock: number;
 }
 

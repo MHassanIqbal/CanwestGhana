@@ -4,6 +4,7 @@ import type {
   Product,
   CreateProductInput,
   UpdateProductInput,
+  ProductSearchOption,
 } from "@/types/product";
 
 export const productApi = {
@@ -12,6 +13,13 @@ export const productApi = {
       ENDPOINTS.product.getAll,
     );
     return data.products;
+  },
+
+  getSearchOptions: async (): Promise<ProductSearchOption[]> => {
+    const { data } = await apiClient.get<{ options: ProductSearchOption[] }>(
+      ENDPOINTS.product.searchOptions,
+    );
+    return data.options;
   },
 
   getProductById: async (id: string): Promise<Product> => {

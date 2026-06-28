@@ -10,7 +10,7 @@ export interface StockLine {
 
 export interface ProductVariant {
   _id: string;
-  product: string;
+  product: string | { _id: string; title: string; description?: string };
   sku: string;
   attributes: ProductVariantAttribute[];
   priceUsd: number;

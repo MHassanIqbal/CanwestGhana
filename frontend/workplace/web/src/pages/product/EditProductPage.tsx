@@ -80,8 +80,10 @@ const EditProductForm = ({ product }: { product: Product }) => {
   const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Swapped out 'name' for 'title' and added 'summary' field state matching UpdateProductInput
   const [form, setForm] = useState<UpdateProductInput>({
-    name: product.name,
+    title: product.title,
+    summary: product.summary ?? "",
     brand: product.brand,
     category: product.category,
     description: product.description ?? "",
@@ -173,8 +175,9 @@ const EditProductForm = ({ product }: { product: Product }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    if (!form.name?.trim()) {
-      setError("Product name is required.");
+    // Updated check constraint context to monitor 'title' instead of 'name'
+    if (!form.title?.trim()) {
+      setError("Product title is required.");
       return;
     }
     updateProduct(form);
@@ -205,7 +208,7 @@ const EditProductForm = ({ product }: { product: Product }) => {
           </Button>
           <div>
             <h1 className="text-xl font-semibold text-foreground">
-              {product.name}
+              {product.title}
             </h1>
             <p className="text-sm text-muted-foreground mt-0.5">
               Edit product, images, and variants
@@ -235,7 +238,7 @@ const EditProductForm = ({ product }: { product: Product }) => {
                 >
                   <img
                     src={url}
-                    alt={product.name}
+                    alt={product.title}
                     className="h-full w-full object-contain"
                   />
                   <button
@@ -292,15 +295,30 @@ const EditProductForm = ({ product }: { product: Product }) => {
                 </div>
               )}
 
+              {/* Title Field instead of Name */}
               <div className="space-y-1.5 max-w-md">
-                <Label htmlFor="name">
-                  Product name <span className="text-destructive">*</span>
+                <Label htmlFor="title">
+                  Product title <span className="text-destructive">*</span>
                 </Label>
                 <Input
-                  id="name"
-                  value={form.name}
+                  id="title"
+                  value={form.title}
                   onChange={(e) =>
-                    setForm((prev) => ({ ...prev, name: e.target.value }))
+                    setForm((prev) => ({ ...prev, title: e.target.value }))
+                  }
+                  disabled={isPending}
+                />
+              </div>
+
+              {/* New Summary Field */}
+              <div className="space-y-1.5 max-w-md">
+                <Label htmlFor="summary">Summary</Label>
+                <Input
+                  id="summary"
+                  placeholder="Short listing blurb or key sub-highlight..."
+                  value={form.summary}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, summary: e.target.value }))
                   }
                   disabled={isPending}
                 />
@@ -358,7 +376,7 @@ const EditProductForm = ({ product }: { product: Product }) => {
                     }))
                   }
                   disabled={isPending}
-                  rows={3}
+                  rows={4}
                 />
               </div>
 

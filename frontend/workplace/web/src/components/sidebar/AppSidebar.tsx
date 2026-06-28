@@ -32,6 +32,7 @@ import {
   Warehouse,
   Package,
   Search,
+  FileText,
 } from "lucide-react";
 import { staffApi } from "@/api/staffApi";
 import { useAuth } from "@/hooks/useAuth";
@@ -110,6 +111,33 @@ const AppSidebar = () => {
                 >
                   <Search />
                   <span>Price List</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel>Sales</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  isActive={location.pathname.startsWith(APP_ROUTES.proforma)}
+                  onClick={() => navigate(APP_ROUTES.proforma)}
+                >
+                  <FileText />
+                  <span>Proforma Invoices</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  isActive={location.pathname.startsWith(APP_ROUTES.customer)}
+                  onClick={() => navigate(APP_ROUTES.customer)}
+                >
+                  <Users />
+                  <span>Customers</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>

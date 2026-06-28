@@ -31,4 +31,13 @@ export const APP_ROUTES = {
     `/product/${productId}/variant/${variantId}`,
 
   priceList: "/price-list",
+
+  proforma: "/proforma",
+  proformaNew: "/proforma/new",
+  proformaEdit: (id: string) => `/proforma/${id}/edit`,
+  proformaVerify: (token: string) => `/proforma/verify/${token}`,
+
+  customer: "/customer",
+  customerNew: "/customer/new",
+  customerEdit: (id: string) => `/customer/${id}`,
 } as const;

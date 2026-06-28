@@ -1,6 +1,7 @@
 import express from "express";
 import {
   getAllProducts,
+  getProductSearchOptions,
   getProductById,
   createProduct,
   updateProduct,
@@ -18,6 +19,9 @@ const router = express.Router();
 
 // Public reads
 router.route("/").get(getAllProducts);
+router
+  .route("/search-options")
+  .get(isStaffAuthenticated, getProductSearchOptions);
 router.route("/:id").get(getProductById);
 
 // Admin and Manager writes

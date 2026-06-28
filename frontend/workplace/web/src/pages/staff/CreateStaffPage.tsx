@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,6 +21,7 @@ import type { CreateStaffInput, StaffRole } from "@/types/staff";
 import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import FullPageLoader from "@/components/loader/FullPageLoader";
+import { locationApi } from "@/api/locationApi";
 
 const CreateStaffPage = () => {
   const navigate = useNavigate();
@@ -35,6 +36,7 @@ const CreateStaffPage = () => {
     email: "",
     password: "",
     role: "employee",
+    branch: null,
   });
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -49,6 +51,10 @@ const CreateStaffPage = () => {
     onError: (err: { message: string }) => {
       toast.error(err.message ?? "Failed to create staff. Please try again.");
     },
+  });
+  const { data: locations = [] } = useQuery({
+    queryKey: ["locations"],
+    queryFn: () => locationApi.getAllLocations(),
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -166,8 +172,7 @@ const CreateStaffPage = () => {
                 </div>
               </div>
 
-              {/* Email + Role side by side, since both are roughly equal in importance */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <div className="space-y-1.5">
                   <Label htmlFor="email">
                     Email <span className="text-destructive">*</span>
@@ -191,10 +196,7 @@ const CreateStaffPage = () => {
                   <Select
                     value={form.role}
                     onValueChange={(value) =>
-                      setForm((prev) => ({
-                        ...prev,
-                        role: value as StaffRole,
-                      }))
+                      setForm((prev) => ({ ...prev, role: value as StaffRole }))
                     }
                     disabled={isPending}
                   >
@@ -207,6 +209,34 @@ const CreateStaffPage = () => {
                         <SelectItem value="manager">Manager</SelectItem>
                       )}
                       {isAdmin && <SelectItem value="admin">Admin</SelectItem>}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label htmlFor="branch">Branch</Label>
+                  <Select
+                    value={form.branch ?? "none"}
+                    onValueChange={(value) =>
+                      setForm((prev) => ({
+                        ...prev,
+                        branch: value === "none" ? null : value,
+                      }))
+                    }
+                    disabled={isPending}
+                  >
+                    <SelectTrigger id="branch" className="w-full">
+                      <SelectValue placeholder="No branch" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">No branch</SelectItem>
+                      {locations
+                        .filter((loc) => loc.type === "branch")
+                        .map((loc) => (
+                          <SelectItem key={loc._id} value={loc._id}>
+                            {loc.name}
+                          </SelectItem>
+                        ))}
                     </SelectContent>
                   </Select>
                 </div>

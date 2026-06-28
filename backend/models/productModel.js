@@ -2,11 +2,26 @@ import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema(
   {
-    name: {
+    // The main display name of the product
+    title: {
       type: String,
-      required: [true, "Product name is required"],
+      required: [true, "Product title is required"],
       trim: true,
-      maxLength: [150, "Product name cannot exceed 150 characters"],
+      maxLength: [150, "Product title cannot exceed 150 characters"],
+    },
+
+    // Short blurb used for product cards/listings (typically 1-2 sentences)
+    summary: {
+      type: String,
+      trim: true,
+      maxLength: [250, "Summary cannot exceed 250 characters"],
+    },
+
+    // The full, detailed product breakdown
+    description: {
+      type: String,
+      trim: true,
+      maxLength: [2000, "Description cannot exceed 2000 characters"],
     },
 
     slug: {
@@ -27,15 +42,6 @@ const productSchema = new mongoose.Schema(
       required: [true, "Category is required"],
     },
 
-    description: {
-      type: String,
-      trim: true,
-      maxLength: [2000, "Description cannot exceed 2000 characters"],
-    },
-
-    // Gallery, unlike Brand/Category's single imageUrl — products typically
-    // need multiple angles/shots. Variant-specific photos (e.g. per color)
-    // live on the variant instead and override these where set.
     images: {
       type: [String],
       default: [],
@@ -54,9 +60,10 @@ const productSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
+// Updated slug logic to target 'title'
 productSchema.pre("validate", function () {
-  if (this.isModified("name") || this.isNew) {
-    this.slug = this.name
+  if ((this.isModified("title") || this.isNew) && this.title) {
+    this.slug = this.title
       .toLowerCase()
       .trim()
       .replace(/[^a-z0-9\s-]/g, "")

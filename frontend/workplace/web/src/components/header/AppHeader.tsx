@@ -10,6 +10,7 @@ const stripSuffix = (title: string) => title.split(" | ")[0];
 const useHeaderTitle = (): string => {
   const location = useLocation();
   const { id } = useParams<{ id: string }>();
+  const { token } = useParams<{ token: string }>();
   const path = location.pathname;
 
   if (path === "/") return stripSuffix(PAGE_META_DATA.dashboard.title);
@@ -54,6 +55,22 @@ const useHeaderTitle = (): string => {
     return stripSuffix(PAGE_META_DATA.locationNew.title);
   if (id && path === APP_ROUTES.locationEdit(id))
     return stripSuffix(PAGE_META_DATA.locationEdit.title);
+
+  if (path === APP_ROUTES.proforma)
+    return stripSuffix(PAGE_META_DATA.proforma.title);
+  if (path === APP_ROUTES.proformaNew)
+    return stripSuffix(PAGE_META_DATA.proformaNew.title);
+  if (id && path === APP_ROUTES.proformaEdit(id))
+    return stripSuffix(PAGE_META_DATA.proformaEdit.title);
+  if (token && path === APP_ROUTES.proformaVerify(token))
+    return stripSuffix(PAGE_META_DATA.proformaVerify.title);
+
+  if (path === APP_ROUTES.customer)
+    return stripSuffix(PAGE_META_DATA.customer.title);
+  if (path === APP_ROUTES.customerNew)
+    return stripSuffix(PAGE_META_DATA.customerNew.title);
+  if (id && path === APP_ROUTES.customerEdit(id))
+    return stripSuffix(PAGE_META_DATA.customerEdit.title);
 
   return "Workplace";
 };

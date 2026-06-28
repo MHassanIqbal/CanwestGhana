@@ -50,6 +50,7 @@ export const ENDPOINTS = {
 
   product: {
     getAll: "/product",
+    searchOptions: "/product/search-options",
     getById: (id: string) => `/product/${id}`,
     create: "/product",
     update: (id: string) => `/product/${id}`,
@@ -70,5 +71,24 @@ export const ENDPOINTS = {
 
   priceList: {
     getAll: "/price-list",
+  },
+
+  proforma: {
+    getAll: "/proforma",
+    getById: (id: string) => `/proforma/${id}`,
+    create: "/proforma",
+    update: (id: string) => `/proforma/${id}`,
+    delete: (id: string) => `/proforma/${id}`,
+    duplicate: (id: string) => `/proforma/${id}/duplicate`,
+    pdf: (id: string) => `/proforma/${id}/pdf`,
+    verify: (token: string) => `/proforma/verify/${token}`,
+  },
+
+  customer: {
+    getAll: "/customer",
+    getById: (id: string) => `/customer/${id}`,
+    create: "/customer",
+    update: (id: string) => `/customer/${id}`,
+    delete: (id: string) => `/customer/${id}`,
   },
 } as const;

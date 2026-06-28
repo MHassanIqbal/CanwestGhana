@@ -98,7 +98,10 @@ const productVariantSchema = new mongoose.Schema(
 );
 
 productVariantSchema.virtual("totalStock").get(function () {
-  return this.stock.reduce((sum, line) => sum + line.quantity, 0);
+  // `stock` may be missing if this doc was loaded via a populate/select
+  // that didn't include it — default to [] so toJSON()/toObject() never
+  // throws when virtuals are serialized.
+  return (this.stock ?? []).reduce((sum, line) => sum + line.quantity, 0);
 });
 
 productVariantSchema.set("toJSON", { virtuals: true });

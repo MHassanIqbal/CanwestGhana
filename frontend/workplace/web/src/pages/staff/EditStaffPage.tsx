@@ -22,6 +22,7 @@ import type { UpdateStaffInput, StaffRole, Staff } from "@/types/staff";
 import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import FullPageLoader from "@/components/loader/FullPageLoader";
+import { locationApi } from "@/api/locationApi";
 
 const EditStaffPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -64,6 +65,7 @@ const EditStaffForm = ({ staff }: { staff: Staff }) => {
     middleName: staff.middleName ?? "",
     lastName: staff.lastName,
     role: staff.role,
+    branch: staff.branch?._id ?? null,
   });
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -73,12 +75,18 @@ const EditStaffForm = ({ staff }: { staff: Staff }) => {
       staffApi.updateStaff(staff._id, input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["staff"] });
+      queryClient.invalidateQueries({ queryKey: ["auth", "me"] });
       toast.success("Staff updated successfully.");
       navigate(APP_ROUTES.staff);
     },
     onError: (err: { message: string }) => {
       toast.error(err.message ?? "Update failed.");
     },
+  });
+  const { data: locations = [] } = useQuery({
+    queryKey: ["locations"],
+    queryFn: () => locationApi.getAllLocations(),
+    enabled: isAdmin,
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -193,7 +201,7 @@ const EditStaffForm = ({ staff }: { staff: Staff }) => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <div className="space-y-1.5">
                   <Label htmlFor="email">Email</Label>
                   <Input
@@ -234,6 +242,36 @@ const EditStaffForm = ({ staff }: { staff: Staff }) => {
                         You cannot change your own role.
                       </p>
                     )}
+                  </div>
+                )}
+
+                {isAdmin && (
+                  <div className="space-y-1.5">
+                    <Label htmlFor="branch">Branch</Label>
+                    <Select
+                      value={form.branch ?? "none"}
+                      onValueChange={(value) =>
+                        setForm((prev) => ({
+                          ...prev,
+                          branch: value === "none" ? null : value,
+                        }))
+                      }
+                      disabled={isPending}
+                    >
+                      <SelectTrigger id="branch" className="w-full">
+                        <SelectValue placeholder="No branch" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">No branch</SelectItem>
+                        {locations
+                          .filter((loc) => loc.type === "branch")
+                          .map((loc) => (
+                            <SelectItem key={loc._id} value={loc._id}>
+                              {loc.name}
+                            </SelectItem>
+                          ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                 )}
               </div>
